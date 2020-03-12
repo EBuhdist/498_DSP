@@ -5,10 +5,10 @@
 #include <tsk.h>
 #include <gbl.h>
 //#include "clkcfg.h"
-
 #include "hellocfg.h"
 #include "ezdsp5502.h"
 #include "stdint.h"
+#include "stdbool.h" 			// for the boolean variable type
 #include "aic3204.h"
 #include "ezdsp5502_mcbsp.h"
 #include "csl_mcbsp.h"
@@ -21,6 +21,14 @@ extern void ConfigureAic3204(void);
 int16_t switchInterrupt = 0;
 int counter = 0;
 int counterTwo = 0;
+
+// Added for Lab 3 button task
+/*
+ * 1 when btn is pressed
+ * 0 when btn is not pressed
+ */
+bool btn_press1 = 0;
+bool btn_press2 = 0;
 
 void main(void)
  {
@@ -37,6 +45,9 @@ void main(void)
     EZDSP5502_I2CGPIO_configLine(  SW0, IN );
     EZDSP5502_I2CGPIO_configLine(  SW1, IN );
 
+    /* Setup I2C GPIOs for LED */
+    EZDSP5502_I2CGPIO_configLine(  LED0, OUT );
+
     /* enable the interrupt with BIOS call */
     C55_enableInt(7); // reference technical manual, I2S2 tx interrupt
     C55_enableInt(6); // reference technical manual, I2S2 rx interrupt
@@ -48,24 +59,7 @@ void main(void)
 
 void myIDLThread(void){
 
-   if(EZDSP5502_I2CGPIO_readLine(SW0) == 0 && counter > 10) {
-    	switchInterrupt = 1;
-        EZDSP5502_waitusec( 1000000 );
 
-    }
-    else {
-    	counter++;
-    	switchInterrupt = 0;
-    }
-
-    if(EZDSP5502_I2CGPIO_readLine(SW1) == 0 && counterTwo > 10) {
-    	switchInterrupt = 2;
-        EZDSP5502_waitusec( 1000000 );
-    }
-    else {
-    	counterTwo++;
-    	switchInterrupt = 0;
-    }
 }
 
 #if 0

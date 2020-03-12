@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := D:/ti/ccsv6/tools/compiler/c5500_4.4.1
+CG_TOOL_ROOT := C:/ti/ccsv6/tools/compiler/c5500_4.4.1
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := -l"./hellocfg.cmd"
@@ -148,13 +148,13 @@ all: biosproj2_96.out
 biosproj2_96.out: $(OBJS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: C5500 Linker'
-	"D:/ti/ccsv6/tools/compiler/c5500_4.4.1/bin/cl55" -v5502 --memory_model=large -O3 -g --define=c5502 --display_error_number --diag_warning=225 --ptrdiff_size=32 -z -m"biosproj2_96.map" --stack_size=0x200 --heap_size=0x400 -i"D:/ti/ccsv6/tools/compiler/c5500_4.4.1/lib" -i"C:/Users/alexa_000/Desktop/ECEN 498-DSP/ezdsp5502_v1/lib" -i"C:/Users/alexa_000/Desktop/ECEN 498-DSP/ezdsp5502_v1/C55xxCSL/lib" -i"D:/Embedded DSP/ezdsp5502_v1/ezdsp5502_v1/lib" -i"D:/Embedded DSP/ezdsp5502_v1/ezdsp5502_v1/C55xxCSL/lib" -i"C:/Windows/system32/config/systemprofile/Desktop/ecen498_spring_2020/ezdsp5502_v1/c55xx_csl/ccs_v4.0_examples/cslVC5505/Debug" -i"C:/Windows/system32/config/systemprofile/Desktop/ecen498_spring_2020/ezdsp5502_v1/C55xxCSL/lib" -i"D:/ti/ccsv6/tools/compiler/c5500_4.4.1/include" -i"D:/ti/bios_5_42_01_09/packages/ti/rtdx/lib/c5500" -i"D:/ti/bios_5_42_01_09/packages/ti/bios/lib" -i"Z:/Documents/Academics/t_ee498/ezdsp5502_v1/C55xxCSL/lib" --reread_libs --display_error_number --warn_sections --xml_link_info="biosproj2_96_linkInfo.xml" --rom_model --sys_stacksize=0x200 -o "biosproj2_96.out" $(ORDERED_OBJS)
+	"C:/ti/ccsv6/tools/compiler/c5500_4.4.1/bin/cl55" -v5502 --memory_model=large -O3 -g --define=c5502 --display_error_number --diag_warning=225 --ptrdiff_size=32 -z -m"biosproj2_96.map" --stack_size=0x200 --heap_size=0x400 -i"C:/ti/ccsv6/tools/compiler/c5500_4.4.1/lib" -i"C:/Users/alexa_000/Desktop/ECEN 498-DSP/ezdsp5502_v1/lib" -i"C:/Users/alexa_000/Desktop/ECEN 498-DSP/ezdsp5502_v1/C55xxCSL/lib" -i"D:/Embedded DSP/ezdsp5502_v1/ezdsp5502_v1/lib" -i"D:/Embedded DSP/ezdsp5502_v1/ezdsp5502_v1/C55xxCSL/lib" -i"C:/Windows/system32/config/systemprofile/Desktop/ecen498_spring_2020/ezdsp5502_v1/c55xx_csl/ccs_v4.0_examples/cslVC5505/Debug" -i"C:/Windows/system32/config/systemprofile/Desktop/ecen498_spring_2020/ezdsp5502_v1/C55xxCSL/lib" -i"C:/ti/ccsv6/tools/compiler/c5500_4.4.1/include" -i"C:/ti/bios_5_42_01_09/packages/ti/rtdx/lib/c5500" -i"C:/ti/bios_5_42_01_09/packages/ti/bios/lib" -i"Z:/Documents/Academics/t_ee498/ezdsp5502_v1/C55xxCSL/lib" --reread_libs --display_error_number --warn_sections --xml_link_info="biosproj2_96_linkInfo.xml" --rom_model --sys_stacksize=0x200 -o "biosproj2_96.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 biosproj2_96.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: C5500 Hex Utility'
-	"D:/ti/ccsv6/tools/compiler/c5500_4.4.1/bin/hex55"  -o "biosproj2_96.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccsv6/tools/compiler/c5500_4.4.1/bin/hex55"  -o "biosproj2_96.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 

@@ -7,6 +7,7 @@
 #include "stdint.h"
 #include "aic3204.h"
 #include "ezdsp5502_mcbsp.h"
+#include "ezdsp5502_i2cgpio.h"			// for the SW0 and SW1 macro definitions
 #include "csl_mcbsp.h"
 
 #include "myfir.h"
@@ -15,13 +16,15 @@
 extern MCBSP_Handle aicMcbsp;
 extern int16_t switchInterrupt;
 extern int16_t switchCount;
+extern bool btn_press1;
+extern bool btn_press2;
+
+extern void myfir(int16_t *in, int16_t *delayLine, int16_t *out, uint16_t numOfSamps, uint16_t numOfCoeffs,const int16_t * filterCoeffs);
 
 /* Global Vars for Processing */
 
 //LPF_50-1150 Hz -- 55dB att -- order 80, 81 coeffs
 const int16_t myLPF[81] =
-
-
 {
         86,     39,     48,     57,     67,     79,     91,    105,    119,    135,    151,    169,    187,    206,    226,    247,
        268,    289,    311,    334,    356,    379,    401,    424,    446,    467,    488,    508,    527,    546,    563,    579,
@@ -30,7 +33,14 @@ const int16_t myLPF[81] =
        268,    247,    226,    206,    187,    169,    151,    135,    119,    105,     91,     79,     67,     57,     48,     39,
         86,
 };
-int16_t delayLine[80];
+//const int16_t myLPF[61] =
+//{
+// 		-4,   -7,    -12,    -19,    -28,    -38,    -50,    -61,    -71,    -77,    -78,    -70,    -51,    -18,     33,    102,
+//        192,    304,    437,    589,    757,    938,   1126,   1315,   1498,   1668,   1819,   1943,   2036,   2094,   2114,   2094,
+//        2036,   1943,   1819,   1668,   1498,   1315,   1126,    938,    757,    589,    437,    304,    192,    102,     33,    -18,
+//       -51,    -70,    -78,    -77,    -71,    -61,    -50,    -38,    -28,    -19,    -12,     -7,     -4
+//};
+int16_t delayLine[60];
 int16_t dataIn;
 
 //FOR PROJECT 3......TSK
@@ -167,20 +177,60 @@ void TSK_audio(void) {
 	int index = 0;
 
 	while(1) {
+
 		MBX_pend(&audioMBX, tempBuffer, SYS_FOREVER);
 
-		for(index = 0; index < 96; index++) {
-			outBuffer[index] = tempBuffer[index];
+		// If button is pressed then filter both channels
+		if (btn_press1 == 1) {
 
+			for(index = 0; index < 48; index++) {
 
+				/*
+				 * Filter both channels  Left (0-47 samples) Right (48-95 Samples)
+				 */
+				myfir((int16_t*)&tempBuffer[index], delayLine, (int16_t*)&outBuffer[index], 1, 81, myLPF);
+				myfir((int16_t*)&tempBuffer[index+48], delayLine, (int16_t*)&outBuffer[index+48], 1, 81, myLPF);
+			}
+		} else {
+				/*
+				 * Don't filter either channel
+				 */
+				for(index = 0; index < 48; index++) {
+					outBuffer[index] = tempBuffer[index];
+					outBuffer[index+48] = tempBuffer[index+48];
+				}
 		}
 	}
 }
 
 void TSK_button(void) {
 
+	// Intro stuff
+
+	while(1) {
+
+		if (EZDSP5502_I2CGPIO_readLine(SW0) == 0) {
+			btn_press1 = btn_press1 ^ 1; // XOR toggles the btn_press variable
+		}
+
+		if (EZDSP5502_I2CGPIO_readLine(SW1) == 0) {
+			btn_press2 = btn_press2 ^ 1; // XOR toggles the btn_press variable
+			if (btn_press2 == 1) {
+				EZDSP5502_I2CGPIO_writeLine(   LED0, HIGH ); // if btn is pressed turn on LED
+			} else {
+				EZDSP5502_I2CGPIO_writeLine(   LED0, LOW ); // if btn is not pressed turn off LED
+			}
+		}
+	}
+
 }
 
 void TSK_fft(void) {
+
+	// Intro stuff
+
+//	while(1) {
+//
+//	}
 
 }
